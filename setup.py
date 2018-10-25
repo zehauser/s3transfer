@@ -10,17 +10,6 @@ ROOT = os.path.dirname(__file__)
 VERSION_RE = re.compile(r'''__version__ = ['"]([0-9.]+)['"]''')
 
 
-requires = [
-    'botocore>=1.3.0,<2.0.0',
-]
-
-
-if sys.version_info[0] == 2:
-    # concurrent.futures is only in python3, so for
-    # python2 we need to install the backport.
-    requires.append('futures>=2.2.0,<4.0.0')
-
-
 def get_version():
     init = open(os.path.join(ROOT, 's3transfer', '__init__.py')).read()
     return VERSION_RE.search(init).group(1)
@@ -36,11 +25,10 @@ setup(
     url='https://github.com/boto/s3transfer',
     packages=find_packages(exclude=['tests*']),
     include_package_data=True,
-    install_requires=requires,
-    extras_require={
-        ':python_version=="2.6" or python_version=="2.7"': [
-            'futures>=2.2.0,<4.0.0']
-    },
+    install_requires=[
+        'botocore>=1.3.0,<2.0.0',
+        'futures>2.2.0,<4.0.0;python_version<"3.0"'
+    ],
     license="Apache License 2.0",
     classifiers=(
         'Development Status :: 3 - Alpha',
